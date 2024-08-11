@@ -4,43 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Employee</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function addEmployee() {
+            const employeeName = document.getElementById('employeeName').value;
+            if (employeeName) {
+                const employees = JSON.parse(localStorage.getItem('employees')) || [];
+                employees.push({ name: employeeName });
+                localStorage.setItem('employees', JSON.stringify(employees));
+                document.getElementById('employeeName').value = '';
+                loadEmployeeData();
+            }
         }
-    </style>
+
+        function loadEmployeeData() {
+            const employees = JSON.parse(localStorage.getItem('employees')) || [];
+            const employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = '';
+
+            employees.forEach(employee => {
+                const listItem = document.createElement('li');
+                listItem.textContent = employee.name;
+                employeeList.appendChild(listItem);
+            });
+        }
+
+        window.onload = function() {
+            loadEmployeeData();
+        };
+    </script>
 </head>
 <body>
     <header>
         <h1>Add New Employee</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add_mem.html">Add Employee</a></li>
+                <li><a href="reset.html">Reset Data</a></li>
+            </ul>
+        </nav>
     </header>
 
     <main>
-        <form id="addEmployeeForm">
-            <label for="employeeName">Employee Name:</label>
-            <input type="text" id="employeeName" name="employeeName" required>
-            <input type="submit" value="Add Employee">
-        </form>
+        <h2>Add New Employee</h2>
+        <input type="text" id="employeeName" placeholder="Employee Name">
+        <button onclick="addEmployee()">Add Employee</button>
 
-        <a href="index.html">Go to Index Page</a>
+        <h3>Current Employees:</h3>
+        <ul id="employeeList"></ul>
     </main>
 
-    <script>
-        document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const employeeName = document.getElementById('employeeName').value;
-
-            // Retrieve existing employees from localStorage or initialize empty array
-            let employees = JSON.parse(localStorage.getItem('employees')) || [];
-            employees.push({ name: employeeName });
-
-            // Save updated employees list to localStorage
-            localStorage.setItem('employees', JSON.stringify(employees));
-
-            // Redirect to index.html
-            window.location.href = 'index.html';
-        });
-    </script>
+    <footer>
+        <p>&copy; 2024 Employee Management System</p>
+    </footer>
 </body>
 </html>
