@@ -31,38 +31,34 @@
         .amount {
             margin-left: 10px;
         }
-        .total-amount {
+        .total-amount, .grand-total {
             font-weight: bold;
+            margin-top: 10px;
         }
     </style>
-</head>
-<body>
-    <header>
-        <h1>App Review Tracker</h1>
-    </header>
-
-    <main>
-        <h2>Enter App Name</h2>
-        <form id="appForm">
-            <label for="appName">App Name:</label>
-            <input type="text" id="appName" name="appName" required>
-        </form>
-
-        <h2>Employee List</h2>
-        <form id="employeeForm">
-            <div class="checkbox-group" id="employeeCheckboxes">
-                <!-- Employee checkboxes will be inserted here -->
-            </div>
-            <div class="total-amount">
-                Total Payment: ₹<span id="totalPayment">0</span>
-            </div>
-            <input type="submit" value="Submit Employee Work">
-        </form>
-
-        <h3>Total Employees: <span id="totalEmployees">0</span></h3>
-    </main>
-
     <script>
+        function includeHTML() {
+            var elements, i, elmnt, file, xhttp;
+            elements = document.getElementsByTagName("*");
+            for (i = 0; i < elements.length; i++) {
+                elmnt = elements[i];
+                file = elmnt.getAttribute("data-include");
+                if (file) {
+                    xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            elmnt.innerHTML = this.responseText;
+                            elmnt.removeAttribute("data-include");
+                            includeHTML();
+                        }
+                    };
+                    xhttp.open("GET", file, true);
+                    xhttp.send();
+                    return;
+                }
+            }
+        }
+
         function loadEmployeeData() {
             const employees = JSON.parse(localStorage.getItem('employees')) || [];
             const checkboxesContainer = document.getElementById('employeeCheckboxes');
@@ -87,7 +83,7 @@
                     } else {
                         amountSpan.textContent = '₹0';
                     }
-                    updateTotalPayment();
+                    updateTotals();
                 });
 
                 label.appendChild(checkbox);
@@ -99,10 +95,16 @@
             totalEmployees.textContent = employees.length;
         }
 
-        function updateTotalPayment() {
+        function updateTotals() {
             const selectedCheckboxes = document.querySelectorAll('input[name="employees"]:checked');
             const totalPayment = selectedCheckboxes.length * 8;
+            const grandTotal = parseFloat(localStorage.getItem('grandTotal') || '0') + totalPayment;
+
             document.getElementById('totalPayment').textContent = totalPayment;
+            document.getElementById('grandTotal').textContent = grandTotal;
+
+            // Update grand total in localStorage
+            localStorage.setItem('grandTotal', grandTotal);
         }
 
         document.getElementById('employeeForm').addEventListener('submit', function(event) {
@@ -114,7 +116,40 @@
             window.location.href = 'work.html';
         });
 
-        window.onload = loadEmployeeData;
+        window.onload = function() {
+            includeHTML();
+            loadEmployeeData();
+            updateTotals();
+        };
     </script>
+</head>
+<body>
+    <div data-include="header.html"></div>
+
+    <main>
+        <h2>Enter App Name</h2>
+        <form id="appForm">
+            <label for="appName">App Name:</label>
+            <input type="text" id="appName" name="appName" required>
+        </form>
+
+        <h2>Employee List</h2>
+        <form id="employeeForm">
+            <div class="checkbox-group" id="employeeCheckboxes">
+                <!-- Employee checkboxes will be inserted here -->
+            </div>
+            <div class="total-amount">
+                Total Payment: ₹<span id="totalPayment">0</span>
+            </div>
+            <div class="grand-total">
+                Grand Total: ₹<span id="grandTotal">0</span>
+            </div>
+            <input type="submit" value="Submit Employee Work">
+        </form>
+
+        <h3>Total Employees: <span id="totalEmployees">0</span></h3>
+    </main>
+
+    <div data-include="footer.html"></div>
 </body>
 </html>
