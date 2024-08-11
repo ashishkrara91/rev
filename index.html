@@ -1,29 +1,44 @@
-<?php
-// Display PHP version
-echo "<!DOCTYPE html>";
-echo "<html>";
-echo "<head>";
-echo "<title>PHP Test Page</title>";
-echo "<style>";
-echo "body { background-color: orange; color: white; font-family: Arial, sans-serif; }";
-echo "h1, h2 { color: white; }";
-echo "pre { background-color: #333; padding: 10px; border-radius: 5px; }";
-echo "</style>";
-echo "</head>";
-echo "<body>";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Test Page</title>
+    <style>
+        body {
+            background-color: orange;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: white;
+        }
+        pre {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
 
-echo "<h1>PHP Test Page</h1>";
-echo "<p>This is a simple PHP test page.</p>";
-echo "<p>Current PHP version: " . phpversion() . "</p>";
+    <h1>HTML Test Page</h1>
+    <p>This is a simple HTML test page.</p>
+    
+    <h2>Server Information:</h2>
+    <pre>
+    <!-- This is where server information would be displayed, if applicable -->
+    </pre>
+    
+    <h2>Current Date and Time:</h2>
+    <p>
+        <!-- Current date and time can be dynamically inserted with JavaScript -->
+        <script>
+            document.write(new Date().toLocaleString());
+        </script>
+    </p>
 
-echo "<h2>Server Information:</h2>";
-echo "<pre>";
-print_r($_SERVER);
-echo "</pre>";
-
-echo "<h2>Current Date and Time:</h2>";
-echo "<p>" . date("Y-m-d H:i:s") . "</p>";
-
-echo "</body>";
-echo "</html>";
-?>
+</body>
+</html>
