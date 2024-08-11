@@ -22,6 +22,12 @@
         th {
             background-color: #f4f4f4;
         }
+        .checkbox-group {
+            margin-bottom: 20px;
+        }
+        .checkbox-group label {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -38,16 +44,12 @@
         </form>
 
         <h2>Employee List</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Employee Name</th>
-                </tr>
-            </thead>
-            <tbody id="employeeTableBody">
-                <!-- Employee list will be inserted here -->
-            </tbody>
-        </table>
+        <form id="employeeForm">
+            <div class="checkbox-group" id="employeeCheckboxes">
+                <!-- Employee checkboxes will be inserted here -->
+            </div>
+            <input type="submit" value="Submit Employee Work">
+        </form>
 
         <h3>Total Employees: <span id="totalEmployees">0</span></h3>
     </main>
@@ -55,17 +57,24 @@
     <script>
         // Mock data retrieval function
         function loadEmployeeData() {
-            // In a real application, fetch data from a server or local storage
+            // Retrieve employees from localStorage
             const employees = JSON.parse(localStorage.getItem('employees')) || [];
-            const tableBody = document.getElementById('employeeTableBody');
+            const checkboxesContainer = document.getElementById('employeeCheckboxes');
             const totalEmployees = document.getElementById('totalEmployees');
 
-            tableBody.innerHTML = ''; // Clear existing data
+            checkboxesContainer.innerHTML = ''; // Clear existing data
 
-            employees.forEach(employee => {
-                const row = tableBody.insertRow();
-                const cellName = row.insertCell(0);
-                cellName.textContent = employee.name;
+            employees.forEach((employee, index) => {
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.name = 'employees';
+                checkbox.value = employee.name;
+                checkbox.id = `employee-${index}`;
+                
+                label.appendChild(checkbox);
+                label.appendChild(document.createTextNode(employee.name));
+                checkboxesContainer.appendChild(label);
             });
 
             totalEmployees.textContent = employees.length;
@@ -74,6 +83,13 @@
         document.getElementById('appForm').addEventListener('submit', function(event) {
             event.preventDefault();
             alert('App Name submitted: ' + document.getElementById('appName').value);
+        });
+
+        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selectedEmployees = Array.from(document.querySelectorAll('input[name="employees"]:checked'))
+                                          .map(checkbox => checkbox.value);
+            alert('Employees who worked on the app: ' + selectedEmployees.join(', '));
         });
 
         // Load employee data on page load
