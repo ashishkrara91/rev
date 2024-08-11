@@ -3,28 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index Page</title>
+    <title>Employee Management</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // Function to include external HTML
-        function includeHTML() {
-            var elements, i, elmnt, file, xhttp;
-            elements = document.querySelectorAll("[data-include]");
-            elements.forEach(function(elmnt) {
-                file = elmnt.getAttribute("data-include");
-                if (file) {
-                    xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            elmnt.innerHTML = this.responseText;
-                            elmnt.removeAttribute("data-include");
-                            includeHTML();
-                        }
-                    };
-                    xhttp.open("GET", file, true);
-                    xhttp.send();
-                }
-            });
+        function initializeEmployeeData() {
+            if (!localStorage.getItem('employees')) {
+                const defaultEmployees = [
+                    { name: 'John Doe' },
+                    { name: 'Jane Smith' },
+                    { name: 'Aditya Raj' }
+                ];
+                localStorage.setItem('employees', JSON.stringify(defaultEmployees));
+            }
         }
 
         function loadEmployeeData() {
@@ -40,7 +30,7 @@
                 checkbox.name = 'employees';
                 checkbox.value = employee.name;
                 checkbox.id = `employee-${index}`;
-                
+
                 const amountSpan = document.createElement('span');
                 amountSpan.className = 'amount';
                 amountSpan.textContent = '₹0';
@@ -71,7 +61,6 @@
             document.getElementById('totalPayment').textContent = totalPayment;
             document.getElementById('grandTotal').textContent = grandTotal;
 
-            // Update grand total in localStorage
             localStorage.setItem('grandTotal', grandTotal);
         }
 
@@ -85,14 +74,23 @@
         });
 
         window.onload = function() {
-            includeHTML();
+            initializeEmployeeData();
             loadEmployeeData();
             updateTotals();
         };
     </script>
 </head>
 <body>
-    <div data-include="header.html"></div>
+    <header>
+        <h1>Employee Management System</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add_mem.html">Add Employee</a></li>
+                <li><a href="reset.html">Reset Data</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
         <h2>Enter App Name</h2>
@@ -118,6 +116,8 @@
         <h3>Total Employees: <span id="totalEmployees">0</span></h3>
     </main>
 
-    <div data-include="footer.html"></div>
+    <footer>
+        <p>&copy; 2024 Employee Management System</p>
+    </footer>
 </body>
 </html>
