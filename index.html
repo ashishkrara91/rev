@@ -6,6 +6,7 @@
     <title>Index Page</title>
     <link rel="stylesheet" href="styles.css">
     <script>
+        // Include header and footer
         function includeHTML() {
             var elements = document.querySelectorAll("[data-include]");
             elements.forEach(function(elmnt) {
@@ -24,13 +25,14 @@
             });
         }
 
+        // Load employee data from employees.txt
         function loadEmployeeData() {
             fetch('employees.txt')
                 .then(response => response.json())
                 .then(data => {
                     const checkboxesContainer = document.getElementById('employeeCheckboxes');
-
                     checkboxesContainer.innerHTML = '';
+
                     data.forEach((employee, index) => {
                         const label = document.createElement('label');
                         const checkbox = document.createElement('input');
@@ -73,19 +75,10 @@
             localStorage.setItem('grandTotal', grandTotal);
         }
 
-        document.getElementById('employeeForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const selectedEmployees = Array.from(document.querySelectorAll('input[name="employees"]:checked'))
-                                          .map(checkbox => checkbox.value);
-            localStorage.setItem('selectedEmployees', JSON.stringify(selectedEmployees));
-            localStorage.setItem('appName', document.getElementById('appName').value);
-            window.location.href = 'work.html';
-        });
-
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
             includeHTML();
             loadEmployeeData();
-        };
+        });
     </script>
 </head>
 <body>
