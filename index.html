@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Summary</title>
+    <title>Index Page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,60 +26,58 @@
 </head>
 <body>
     <header>
-        <!-- Navigation menu here -->
+        <h1>App Review Tracker</h1>
     </header>
 
     <main>
-        <h1>Daily Summary</h1>
-        <p>App Name: Example App</p>
-        
-        <!-- Employee Data Display -->
+        <h2>Enter App Name</h2>
+        <form id="appForm">
+            <label for="appName">App Name:</label>
+            <input type="text" id="appName" name="appName" required>
+            <input type="submit" value="Submit">
+        </form>
+
+        <h2>Employee List</h2>
         <table>
             <thead>
                 <tr>
                     <th>Employee Name</th>
-                    <th>Amount</th>
                 </tr>
             </thead>
             <tbody id="employeeTableBody">
-                <!-- Employee data will be inserted here -->
+                <!-- Employee list will be inserted here -->
             </tbody>
         </table>
 
-        <!-- Total Earning -->
-        <h3>Total Earning: ₹<span id="totalEarning">0</span></h3>
-        <!-- Grand Total Payment Today -->
-        <h3>Grand Total Payment Today: ₹<span id="grandTotalPaymentToday">0</span></h3>
+        <h3>Total Employees: <span id="totalEmployees">0</span></h3>
     </main>
 
     <script>
-        // Sample data
-        const employeeData = [
-            { name: 'John Doe', amount: 80 },
-            { name: 'Jane Smith', amount: 100 },
-            { name: 'Aditya Raj', amount: 160 },
-        ];
+        // Mock data retrieval function
+        function loadEmployeeData() {
+            // In a real application, fetch data from a server or local storage
+            const employees = JSON.parse(localStorage.getItem('employees')) || [];
+            const tableBody = document.getElementById('employeeTableBody');
+            const totalEmployees = document.getElementById('totalEmployees');
 
-        // Calculations
-        let totalEarning = 0;
-        employeeData.forEach(data => {
-            totalEarning += data.amount;
+            tableBody.innerHTML = ''; // Clear existing data
+
+            employees.forEach(employee => {
+                const row = tableBody.insertRow();
+                const cellName = row.insertCell(0);
+                cellName.textContent = employee.name;
+            });
+
+            totalEmployees.textContent = employees.length;
+        }
+
+        document.getElementById('appForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('App Name submitted: ' + document.getElementById('appName').value);
         });
 
-        // Displaying data
-        const tableBody = document.getElementById('employeeTableBody');
-        employeeData.forEach(data => {
-            const row = tableBody.insertRow();
-            const cellName = row.insertCell(0);
-            const cellAmount = row.insertCell(1);
-
-            cellName.textContent = data.name;
-            cellAmount.textContent = data.amount;
-        });
-
-        // Displaying totals
-        document.getElementById('totalEarning').textContent = totalEarning;
-        document.getElementById('grandTotalPaymentToday').textContent = totalEarning;
+        // Load employee data on page load
+        window.onload = loadEmployeeData;
     </script>
 </body>
 </html>
