@@ -6,11 +6,11 @@
     <title>Index Page</title>
     <link rel="stylesheet" href="styles.css">
     <script>
+        // Function to include external HTML
         function includeHTML() {
             var elements, i, elmnt, file, xhttp;
-            elements = document.getElementsByTagName("*");
-            for (i = 0; i < elements.length; i++) {
-                elmnt = elements[i];
+            elements = document.querySelectorAll("[data-include]");
+            elements.forEach(function(elmnt) {
                 file = elmnt.getAttribute("data-include");
                 if (file) {
                     xhttp = new XMLHttpRequest();
@@ -23,9 +23,8 @@
                     };
                     xhttp.open("GET", file, true);
                     xhttp.send();
-                    return;
                 }
-            }
+            });
         }
 
         function loadEmployeeData() {
