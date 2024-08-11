@@ -55,14 +55,12 @@
     </main>
 
     <script>
-        // Mock data retrieval function
         function loadEmployeeData() {
-            // Retrieve employees from localStorage
             const employees = JSON.parse(localStorage.getItem('employees')) || [];
             const checkboxesContainer = document.getElementById('employeeCheckboxes');
             const totalEmployees = document.getElementById('totalEmployees');
 
-            checkboxesContainer.innerHTML = ''; // Clear existing data
+            checkboxesContainer.innerHTML = '';
 
             employees.forEach((employee, index) => {
                 const label = document.createElement('label');
@@ -89,10 +87,11 @@
             event.preventDefault();
             const selectedEmployees = Array.from(document.querySelectorAll('input[name="employees"]:checked'))
                                           .map(checkbox => checkbox.value);
-            alert('Employees who worked on the app: ' + selectedEmployees.join(', '));
+            localStorage.setItem('selectedEmployees', JSON.stringify(selectedEmployees));
+            localStorage.setItem('appName', document.getElementById('appName').value);
+            window.location.href = 'work.html';
         });
 
-        // Load employee data on page load
         window.onload = loadEmployeeData;
     </script>
 </body>
