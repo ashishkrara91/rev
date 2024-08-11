@@ -1,6 +1,1 @@
 
-[
-    {"name": "John Doe"},
-    {"name": "Jane Smith"},
-    {"name": "Aditya Raj"}
-]
