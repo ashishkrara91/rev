@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #f44336;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #d32f2f;
+        }
+        input[type="password"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reset Data</h1>
+    <p>Enter the password to reset all stored data. This action cannot be undone.</p>
+    
+    <input type="password" id="password" placeholder="Enter password">
+    <button onclick="resetData()">Reset Data</button>
+
+    <script>
+        function resetData() {
+            const password = document.getElementById('password').value;
+            const correctPassword = '802301';
+            
+            if (password === correctPassword) {
+                if (confirm('Are you sure you want to reset all data? This action cannot be undone.')) {
+                    localStorage.removeItem('employees');
+                    localStorage.removeItem('selectedEmployees');
+                    localStorage.removeItem('appName');
+                    localStorage.removeItem('grandTotal');
+                    alert('Data has been reset successfully.');
+                }
+            } else {
+                alert('Incorrect password. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
