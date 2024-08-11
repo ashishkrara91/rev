@@ -28,6 +28,12 @@
         .checkbox-group label {
             display: block;
         }
+        .amount {
+            margin-left: 10px;
+        }
+        .total-amount {
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -40,13 +46,15 @@
         <form id="appForm">
             <label for="appName">App Name:</label>
             <input type="text" id="appName" name="appName" required>
-            <input type="submit" value="Submit">
         </form>
 
         <h2>Employee List</h2>
         <form id="employeeForm">
             <div class="checkbox-group" id="employeeCheckboxes">
                 <!-- Employee checkboxes will be inserted here -->
+            </div>
+            <div class="total-amount">
+                Total Payment: ₹<span id="totalPayment">0</span>
             </div>
             <input type="submit" value="Submit Employee Work">
         </form>
@@ -61,7 +69,6 @@
             const totalEmployees = document.getElementById('totalEmployees');
 
             checkboxesContainer.innerHTML = '';
-
             employees.forEach((employee, index) => {
                 const label = document.createElement('label');
                 const checkbox = document.createElement('input');
@@ -70,18 +77,33 @@
                 checkbox.value = employee.name;
                 checkbox.id = `employee-${index}`;
                 
+                const amountSpan = document.createElement('span');
+                amountSpan.className = 'amount';
+                amountSpan.textContent = '₹0';
+
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        amountSpan.textContent = '₹8';
+                    } else {
+                        amountSpan.textContent = '₹0';
+                    }
+                    updateTotalPayment();
+                });
+
                 label.appendChild(checkbox);
                 label.appendChild(document.createTextNode(employee.name));
+                label.appendChild(amountSpan);
                 checkboxesContainer.appendChild(label);
             });
 
             totalEmployees.textContent = employees.length;
         }
 
-        document.getElementById('appForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            alert('App Name submitted: ' + document.getElementById('appName').value);
-        });
+        function updateTotalPayment() {
+            const selectedCheckboxes = document.querySelectorAll('input[name="employees"]:checked');
+            const totalPayment = selectedCheckboxes.length * 8;
+            document.getElementById('totalPayment').textContent = totalPayment;
+        }
 
         document.getElementById('employeeForm').addEventListener('submit', function(event) {
             event.preventDefault();
