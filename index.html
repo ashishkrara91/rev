@@ -3,42 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Test Page</title>
+    <title>Daily Summary</title>
     <style>
         body {
-            background-color: orange;
-            color: white;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            margin: 20px;
         }
-        h1, h2 {
-            color: white;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
         }
-        pre {
-            background-color: #333;
-            padding: 10px;
-            border-radius: 5px;
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
 <body>
+    <header>
+        <!-- Navigation menu here -->
+    </header>
 
-    <h1>HTML Test Page</h1>
-    <p>This is a simple HTML test page.</p>
-    
-    <h2>Server Information:</h2>
-    <pre>
-    <!-- This is where server information would be displayed, if applicable -->
-    </pre>
-    
-    <h2>Current Date and Time:</h2>
-    <p>
-        <!-- Current date and time can be dynamically inserted with JavaScript -->
-        <script>
-            document.write(new Date().toLocaleString());
-        </script>
-    </p>
+    <main>
+        <h1>Daily Summary</h1>
+        <p>App Name: Example App</p>
+        
+        <!-- Employee Data Display -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="employeeTableBody">
+                <!-- Employee data will be inserted here -->
+            </tbody>
+        </table>
 
+        <!-- Total Earning -->
+        <h3>Total Earning: ₹<span id="totalEarning">0</span></h3>
+        <!-- Grand Total Payment Today -->
+        <h3>Grand Total Payment Today: ₹<span id="grandTotalPaymentToday">0</span></h3>
+    </main>
+
+    <script>
+        // Sample data
+        const employeeData = [
+            { name: 'John Doe', amount: 80 },
+            { name: 'Jane Smith', amount: 100 },
+            { name: 'Aditya Raj', amount: 160 },
+        ];
+
+        // Calculations
+        let totalEarning = 0;
+        employeeData.forEach(data => {
+            totalEarning += data.amount;
+        });
+
+        // Displaying data
+        const tableBody = document.getElementById('employeeTableBody');
+        employeeData.forEach(data => {
+            const row = tableBody.insertRow();
+            const cellName = row.insertCell(0);
+            const cellAmount = row.insertCell(1);
+
+            cellName.textContent = data.name;
+            cellAmount.textContent = data.amount;
+        });
+
+        // Displaying totals
+        document.getElementById('totalEarning').textContent = totalEarning;
+        document.getElementById('grandTotalPaymentToday').textContent = totalEarning;
+    </script>
 </body>
 </html>
