@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Add New Employee</h1>
+    </header>
+
+    <main>
+        <form id="addEmployeeForm">
+            <label for="employeeName">Employee Name:</label>
+            <input type="text" id="employeeName" name="employeeName" required>
+            <input type="submit" value="Add Employee">
+        </form>
+
+        <a href="index.html">Go to Index Page</a>
+    </main>
+
+    <script>
+        document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const employeeName = document.getElementById('employeeName').value;
+
+            // Retrieve existing employees from localStorage or initialize empty array
+            let employees = JSON.parse(localStorage.getItem('employees')) || [];
+            employees.push({ name: employeeName });
+
+            // Save updated employees list to localStorage
+            localStorage.setItem('employees', JSON.stringify(employees));
+
+            // Redirect to index.html
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
