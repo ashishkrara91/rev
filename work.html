@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Work Details</h1>
+    </header>
+
+    <main>
+        <h2>App Name: <span id="appName"></span></h2>
+        <h2>Employees who worked:</h2>
+        <ul id="employeeList">
+            <!-- Employee list will be inserted here -->
+        </ul>
+        <h3>Total Earning: ₹<span id="totalEarning">0</span></h3>
+    </main>
+
+    <script>
+        function displayWorkDetails() {
+            const selectedEmployees = JSON.parse(localStorage.getItem('selectedEmployees')) || [];
+            const appName = localStorage.getItem('appName') || 'N/A';
+            const totalEarning = selectedEmployees.length * 8;
+
+            document.getElementById('appName').textContent = appName;
+
+            const employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = '';
+
+            selectedEmployees.forEach(employee => {
+                const listItem = document.createElement('li');
+                listItem.textContent = employee;
+                employeeList.appendChild(listItem);
+            });
+
+            document.getElementById('totalEarning').textContent = totalEarning;
+        }
+
+        window.onload = displayWorkDetails;
+    </script>
+</body>
+</html>
