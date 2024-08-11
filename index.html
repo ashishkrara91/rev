@@ -25,13 +25,16 @@
             });
         }
 
-        // Load employee data from employees.txt
+        // Load employee data from GitHub
         function loadEmployeeData() {
-            fetch('employees.txt')
+            fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.txt')
                 .then(response => response.json())
                 .then(data => {
                     const checkboxesContainer = document.getElementById('employeeCheckboxes');
                     checkboxesContainer.innerHTML = '';
+
+                    // Check if data is loaded correctly
+                    console.log("Employee data loaded:", data);
 
                     data.forEach((employee, index) => {
                         const label = document.createElement('label');
