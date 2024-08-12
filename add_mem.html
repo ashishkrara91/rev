@@ -6,31 +6,41 @@
     <title>Add Employee</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        function addEmployee() {
+        async function addEmployee() {
             const employeeName = document.getElementById('employeeName').value;
             if (employeeName) {
-                const employees = JSON.parse(localStorage.getItem('employees')) || [];
+                const response = await fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.json');
+                const employees = await response.json();
                 employees.push({ name: employeeName });
-                localStorage.setItem('employees', JSON.stringify(employees));
-                document.getElementById('employeeName').value = '';
-                loadEmployeeData();
+
+                const token = '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'; // Replace with your GitHub Personal Access Token
+
+                const updatedResponse = await fetch('https://api.github.com/gists/YOUR_GIST_ID', {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            'employees.json': {
+                                content: JSON.stringify(employees, null, 2)
+                            }
+                        }
+                    })
+                });
+
+                if (updatedResponse.ok) {
+                    document.getElementById('employeeName').value = '';
+                    alert('Employee added successfully!');
+                } else {
+                    alert('Failed to update employee data.');
+                }
             }
         }
 
-        function loadEmployeeData() {
-            const employees = JSON.parse(localStorage.getItem('employees')) || [];
-            const employeeList = document.getElementById('employeeList');
-            employeeList.innerHTML = '';
-
-            employees.forEach(employee => {
-                const listItem = document.createElement('li');
-                listItem.textContent = employee.name;
-                employeeList.appendChild(listItem);
-            });
-        }
-
         window.onload = function() {
-            loadEmployeeData();
+            document.getElementById('addButton').addEventListener('click', addEmployee);
         };
     </script>
 </head>
@@ -41,6 +51,7 @@
             <ul>
                 <li><a href="index.html">Home</a></li>
                 <li><a href="add_mem.html">Add Employee</a></li>
+                <li><a href="save_mem.html">Save Data</a></li>
                 <li><a href="reset.html">Reset Data</a></li>
             </ul>
         </nav>
@@ -48,11 +59,8 @@
 
     <main>
         <h2>Add New Employee</h2>
-        <input type="text" id="employeeName" placeholder="Employee Name">
-        <button onclick="addEmployee()">Add Employee</button>
-
-        <h3>Current Employees:</h3>
-        <ul id="employeeList"></ul>
+        <input type="text" id="employeeName" placeholder="Employee Name" required>
+        <button id="addButton">Add Employee</button>
     </main>
 
     <footer>
