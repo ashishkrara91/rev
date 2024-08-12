@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <script>
+        function loadEmployeeData() {
+            fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.json')
+                .then(response => response.json())
+                .then(data => {
+                    const employeeList = document.getElementById('employeeList');
+                    employeeList.innerHTML = '';
+
+                    data.forEach(employee => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = employee.name;
+                        employeeList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error loading employee data:', error));
+        }
+
+        window.onload = function() {
+            loadEmployeeData();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Employee List</h1>
+    </header>
+
+    <main>
+        <h2>Current Employees:</h2>
+        <ul id="employeeList"></ul>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Employee Management System</p>
+    </footer>
+</body>
+</html>
