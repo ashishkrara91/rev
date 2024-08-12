@@ -7,8 +7,13 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         async function loadEmployeeData() {
-            const response = await fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.json');
-            const employees = await response.json();
+            const response = await fetch('https://api.github.com/gists/413e4bc7e1b17866300fbdcf8d41c9b9', {
+                headers: {
+                    'Authorization': `token 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`
+                }
+            });
+            const gist = await response.json();
+            const employees = JSON.parse(gist.files['employees.json'].content || '[]');
             
             const employeeList = document.getElementById('employeeList');
             employeeList.innerHTML = '';
