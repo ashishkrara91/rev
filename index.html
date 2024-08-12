@@ -6,118 +6,47 @@
     <title>Index Page</title>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // Include header and footer
-        function includeHTML() {
-            var elements = document.querySelectorAll("[data-include]");
-            elements.forEach(function(elmnt) {
-                var file = elmnt.getAttribute("data-include");
-                if (file) {
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
-                            elmnt.innerHTML = this.responseText;
-                            elmnt.removeAttribute("data-include");
-                        }
-                    };
-                    xhttp.open("GET", file, true);
-                    xhttp.send();
-                }
+        async function loadEmployeeData() {
+            const response = await fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.json');
+            const employees = await response.json();
+            
+            const employeeList = document.getElementById('employeeList');
+            employeeList.innerHTML = '';
+
+            employees.forEach(employee => {
+                const listItem = document.createElement('li');
+                listItem.textContent = employee.name;
+                employeeList.appendChild(listItem);
             });
         }
 
-        // Load employee data from GitHub
-        function loadEmployeeData() {
-            fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.txt')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();  // Convert the response to JSON
-                })
-                .then(data => {
-                    const checkboxesContainer = document.getElementById('employeeCheckboxes');
-                    checkboxesContainer.innerHTML = '';
-
-                    // Log the loaded data for debugging
-                    console.log("Employee data loaded:", data);
-
-                    // Populate the employee checkboxes
-                    data.forEach((employee, index) => {
-                        const label = document.createElement('label');
-                        const checkbox = document.createElement('input');
-                        checkbox.type = 'checkbox';
-                        checkbox.name = 'employees';
-                        checkbox.value = employee.name;
-                        checkbox.id = `employee-${index}`;
-
-                        const amountSpan = document.createElement('span');
-                        amountSpan.className = 'amount';
-                        amountSpan.textContent = '₹0';
-
-                        checkbox.addEventListener('change', function() {
-                            if (this.checked) {
-                                amountSpan.textContent = '₹8';
-                            } else {
-                                amountSpan.textContent = '₹0';
-                            }
-                            updateTotals();
-                        });
-
-                        label.appendChild(checkbox);
-                        label.appendChild(document.createTextNode(employee.name));
-                        label.appendChild(amountSpan);
-                        checkboxesContainer.appendChild(label);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading employee data:', error);
-                    alert('Error loading employee data. Please try again later.');
-                });
-        }
-
-        function updateTotals() {
-            const selectedCheckboxes = document.querySelectorAll('input[name="employees"]:checked');
-            const totalPayment = selectedCheckboxes.length * 8;
-            const grandTotal = parseFloat(localStorage.getItem('grandTotal') || '0') + totalPayment;
-
-            document.getElementById('totalPayment').textContent = totalPayment;
-            document.getElementById('grandTotal').textContent = grandTotal;
-
-            // Update grand total in localStorage
-            localStorage.setItem('grandTotal', grandTotal);
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
-            includeHTML();
             loadEmployeeData();
         });
     </script>
 </head>
 <body>
-    <header data-include="header.html"></header>
+    <header>
+        <h1>Employee List</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add_mem.html">Add Employee</a></li>
+                <li><a href="save_mem.html">Save Data</a></li>
+                <li><a href="reset.html">Reset Data</a></li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
-        <h2>Enter App Name</h2>
-        <form id="appForm">
-            <label for="appName">App Name:</label>
-            <input type="text" id="appName" name="appName" required>
-        </form>
-
         <h2>Employee List</h2>
-        <form id="employeeForm">
-            <div class="checkbox-group" id="employeeCheckboxes">
-                <!-- Employee checkboxes will be inserted here -->
-            </div>
-            <div class="total-amount">
-                Total Payment: ₹<span id="totalPayment">0</span>
-            </div>
-            <div class="grand-total">
-                Grand Total: ₹<span id="grandTotal">0</span>
-            </div>
-            <input type="submit" value="Submit Employee Work">
-        </form>
+        <ul id="employeeList">
+            <!-- Employee list will be inserted here -->
+        </ul>
     </main>
 
-    <footer data-include="footer.html"></footer>
+    <footer>
+        <p>&copy; 2024 Employee Management System</p>
+    </footer>
 </body>
 </html>
