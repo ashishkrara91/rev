@@ -28,14 +28,20 @@
         // Load employee data from GitHub
         function loadEmployeeData() {
             fetch('https://raw.githubusercontent.com/ashishkrara91/rev/main/employees.txt')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();  // Convert the response to JSON
+                })
                 .then(data => {
                     const checkboxesContainer = document.getElementById('employeeCheckboxes');
                     checkboxesContainer.innerHTML = '';
 
-                    // Check if data is loaded correctly
+                    // Log the loaded data for debugging
                     console.log("Employee data loaded:", data);
 
+                    // Populate the employee checkboxes
                     data.forEach((employee, index) => {
                         const label = document.createElement('label');
                         const checkbox = document.createElement('input');
@@ -63,7 +69,10 @@
                         checkboxesContainer.appendChild(label);
                     });
                 })
-                .catch(error => console.error('Error loading employee data:', error));
+                .catch(error => {
+                    console.error('Error loading employee data:', error);
+                    alert('Error loading employee data. Please try again later.');
+                });
         }
 
         function updateTotals() {
