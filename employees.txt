@@ -1,1 +1,41 @@
+function loadEmployeeData() {
+    // For testing, use localStorage instead of GitHub fetch
+    const data = JSON.parse(localStorage.getItem('employees')) || [
+        {"name": "Employee 1"},
+        {"name": "Employee 2"},
+        {"name": "Employee 3"}
+    ];
+
+    const checkboxesContainer = document.getElementById('employeeCheckboxes');
+    checkboxesContainer.innerHTML = '';
+
+    console.log("Employee data loaded:", data);
+
+    data.forEach((employee, index) => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'employees';
+        checkbox.value = employee.name;
+        checkbox.id = `employee-${index}`;
+
+        const amountSpan = document.createElement('span');
+        amountSpan.className = 'amount';
+        amountSpan.textContent = '₹0';
+
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                amountSpan.textContent = '₹8';
+            } else {
+                amountSpan.textContent = '₹0';
+            }
+            updateTotals();
+        });
+
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(employee.name));
+        label.appendChild(amountSpan);
+        checkboxesContainer.appendChild(label);
+    });
+}
 
